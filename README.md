@@ -17,7 +17,7 @@ Mainly for fun :)
         in """([a-z ]+)""" -> match().let { (something) -> "say $something" }
         else               -> "say nothing"
     }
-}.let { println(it) } // "say hello everybody"
+} // "say hello everybody"
 
 "sum 1 2" matches {
     when (it) {
@@ -25,5 +25,5 @@ Mainly for fun :)
         in """concat (\d+) (\d+)""" -> match().let { (first, second) -> (first + second).toInt() }
         else                        -> Int.MAX_VALUE
     }
-}.let { println(it) } // "3"
+} // 3
 ```

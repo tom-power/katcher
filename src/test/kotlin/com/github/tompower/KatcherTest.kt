@@ -58,16 +58,6 @@ class KatcherTest {
     }
 
     @Test
-    fun name() {
-        "say hello everybody" matches {
-            when (it) {
-                in """say ([a-z ]+)""" -> match().let { (something) -> println(something) }  // "hello everybody"
-                else                   -> Unit
-            }
-        }
-    }
-
-    @Test
     fun `can match int typed capture groups`() {
         val matcher: Katcher.(CharSequence) -> Int = {
             when (it) {
