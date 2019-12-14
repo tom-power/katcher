@@ -21,10 +21,10 @@ class KatcherTest {
     @Test
     fun `can match stringly typed capture groups using anonymous function syntax`() {
         val matcher = fun Katcher.(input: CharSequence): String =
-                when (input) {
-                    in """([a-z]+) (\d+)""" -> match().let { (letters, numbers) -> "$letters, $numbers" }
-                    else                    -> "not found"
-                }
+            when (input) {
+                in """([a-z]+) (\d+)""" -> match().let { (letters, numbers) -> "$letters, $numbers" }
+                else                    -> "not found"
+            }
 
         assertEquals("abc, 123", "abc 123" matches matcher)
         assertEquals("not found", "lalala" matches matcher)
@@ -33,12 +33,12 @@ class KatcherTest {
     @Test
     fun `can match stringly typed capture groups in a function`() {
         fun match(input: String): String =
-                input matches {
-                    when (it) {
-                        in """([a-z]+) (\d+)""" -> match().let { (letters, numbers) -> "$letters, $numbers" }
-                        else                    -> "not found"
-                    }
+            input matches {
+                when (it) {
+                    in """([a-z]+) (\d+)""" -> match().let { (letters, numbers) -> "$letters, $numbers" }
+                    else                    -> "not found"
                 }
+            }
 
         assertEquals("abc, 123", match("abc 123"))
         assertEquals("not found", match("lalala"))
@@ -105,8 +105,8 @@ class KatcherTest {
         assertEquals(Say("bye"), "S bye" matches robotCommandMatcher)
         assertEquals(Wave(times = 5, vigour = 100, hand = 'L'), "W 5 100 L" matches robotCommandMatcher)
         assertEquals(
-                Fly(speed = 100000000, place = PointInSpace(1, 0, 0)),
-                "F 100000000 1 0 0" matches robotCommandMatcher
+            Fly(speed = 100000000, place = PointInSpace(1, 0, 0)),
+            "F 100000000 1 0 0" matches robotCommandMatcher
         )
         assertEquals(Unknown, "lalala" matches robotCommandMatcher)
     }
