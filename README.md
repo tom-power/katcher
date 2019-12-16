@@ -1,6 +1,6 @@
 # Katcher
 
-A Kotlin class for doing something like regex pattern matching with case classes in [Scala](https://docs.scala-lang.org/tour/regular-expression-patterns.html).
+A Kotlin class for using regex to do something like pattern matching with case classes in [Scala](https://docs.scala-lang.org/tour/pattern-matching.html).
 
 Inspired by questions about the availability of similar in Kotlin, particularly [this one](https://discuss.kotlinlang.org/t/using-regex-in-a-when/1794) and related suggestions.
 
