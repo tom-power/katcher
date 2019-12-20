@@ -1,5 +1,7 @@
 # Katcher
 
+[![](https://jitpack.io/v/tom-power/katcher.svg)](https://jitpack.io/#tom-power/katcher)
+
 A Kotlin class for using regex to do something like pattern matching with case classes in [Scala](https://docs.scala-lang.org/tour/pattern-matching.html).
 
 Inspired by questions about the availability of similar in Kotlin, particularly [this one](https://discuss.kotlinlang.org/t/using-regex-in-a-when/1794) and related suggestions.
@@ -27,3 +29,18 @@ Mainly for fun :)
     }
 } // 3
 ```
+
+### Installation
+
+```groovy
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+dependencies {
+        implementation 'com.github.tom-power:katcher:master-SNAPSHOT'
+}
+```
+
