@@ -1,5 +1,7 @@
 package com.github.tompower
 
+import com.natpryce.hamkrest.assertion.assertThat
+import com.natpryce.hamkrest.equalTo
 import junit.framework.TestCase.assertEquals
 import org.junit.Test
 
@@ -14,8 +16,8 @@ class KatcherTest {
             }
         }
 
-        assertEquals("abc, 123", "abc 123" match matcher)
-        assertEquals("not found", "lalala" match matcher)
+        assertThat("abc 123" match matcher, equalTo("abc, 123"))
+        assertThat("lalala" match matcher, equalTo("not found"))
     }
 
     @Test
@@ -26,8 +28,8 @@ class KatcherTest {
                 else                    -> "not found"
             }
 
-        assertEquals("abc, 123", "abc 123" match matcher)
-        assertEquals("not found", "lalala" match matcher)
+        assertThat("abc 123" match matcher, equalTo("abc, 123"))
+        assertThat("lalala" match matcher, equalTo("not found"))
     }
 
     @Test
@@ -40,8 +42,8 @@ class KatcherTest {
                 }
             }
 
-        assertEquals("abc, 123", match("abc 123"))
-        assertEquals("not found", match("lalala"))
+        assertThat(match("abc 123"), equalTo("abc, 123"))
+        assertThat(match("lalala"), equalTo("not found"))
     }
 
     @Test
@@ -53,8 +55,8 @@ class KatcherTest {
             }
         }
 
-        assertEquals("abc, 123", "abc 123" match matcher)
-        assertEquals("not found", "lalala" match matcher)
+        assertThat("abc 123" match matcher, equalTo("abc, 123"))
+        assertThat("lalala" match matcher, equalTo("not found"))
     }
 
     @Test
@@ -66,8 +68,8 @@ class KatcherTest {
             }
         }
 
-        assertEquals(3, "1 2" match matcher)
-        assertEquals(Int.MAX_VALUE, "lalala" match matcher)
+        assertThat("1 2" match matcher, equalTo(3))
+        assertThat("lalala" match matcher, equalTo(Int.MAX_VALUE))
     }
 
     @Test
@@ -79,8 +81,8 @@ class KatcherTest {
             }
         }
 
-        assertEquals('C', "C" match matcher)
-        assertEquals('N', "lalala" match matcher)
+        assertThat("C" match matcher, equalTo('C'))
+        assertThat("lalala" match matcher, equalTo('N'))
     }
 
     @Test
@@ -101,14 +103,12 @@ class KatcherTest {
             }
         }
 
-        assertEquals(Start, "S" match robotCommandMatcher)
-        assertEquals(Say("bye"), "S bye" match robotCommandMatcher)
-        assertEquals(Wave(times = 5, vigour = 100, hand = 'L'), "W 5 100 L" match robotCommandMatcher)
-        assertEquals(
-            Fly(speed = 100000000, place = PointInSpace(1, 0, 0)),
-            "F 100000000 1 0 0" match robotCommandMatcher
-        )
-        assertEquals(Unknown, "lalala" match robotCommandMatcher)
+
+        assertThat("S" match robotCommandMatcher, equalTo<RobotCommand>(Start))
+        assertThat("S bye" match robotCommandMatcher, equalTo<RobotCommand>(Say("bye")))
+        assertThat("W 5 100 L" match robotCommandMatcher, equalTo<RobotCommand>(Wave(times = 5, vigour = 100, hand = 'L')))
+        assertThat("F 100000000 1 0 0" match robotCommandMatcher, equalTo<RobotCommand>(Fly(speed = 100000000, place = PointInSpace(1, 0, 0))))
+        assertThat("lalala" match robotCommandMatcher, equalTo<RobotCommand>(Unknown))
     }
 
     data class PointInSpace(val x: Int, val y: Int, val z: Int)
