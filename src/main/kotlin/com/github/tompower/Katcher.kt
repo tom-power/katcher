@@ -38,10 +38,10 @@ class Katcher(
      * @return Match2<A, B>
      */
     inline fun <reified A, reified B> match2As(): Match2<A, B> =
-        matches.let {
+        matches.run {
             Match2(
-                it.component1().toType(),
-                it.component2().toType()
+                component1().toType(),
+                component2().toType()
             )
         }
 
@@ -50,11 +50,11 @@ class Katcher(
      * @return Match3<A, B, C>
      */
     inline fun <reified A, reified B, reified C> match3As(): Match3<A, B, C> =
-        matches.let {
+        matches.run {
             Match3(
-                it.component1().toType(),
-                it.component2().toType(),
-                it.component3().toType()
+                component1().toType(),
+                component2().toType(),
+                component3().toType()
             )
         }
 
@@ -63,12 +63,12 @@ class Katcher(
      * @return Match4<A, B, C, D>
      */
     inline fun <reified A, reified B, reified C, reified D> match4As(): Match4<A, B, C, D> =
-        matches.let {
+        matches.run {
             Match4(
-                it.component1().toType(),
-                it.component2().toType(),
-                it.component3().toType(),
-                it.component4().toType()
+                component1().toType(),
+                component2().toType(),
+                component3().toType(),
+                component4().toType()
             )
         }
 
