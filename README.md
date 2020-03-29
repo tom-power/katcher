@@ -23,8 +23,8 @@ Mainly for fun :)
 
 "sum 1 2" match {
     when (input) {
-        """sum (\d+) (\d+)"""    -> match2As<Int, Int>().let { first + second }
-        """concat (\d+) (\d+)""" -> match2As<String, String>().let { (first + second).toInt() }
+        """sum (\d+) (\d+)"""    -> match2As<Int, Int>().run { first + second }
+        """concat (\d+) (\d+)""" -> match2As<String, String>().run { (first + second).toInt() }
         else                     -> Int.MAX_VALUE
     }
 } // 3
