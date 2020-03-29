@@ -9,7 +9,7 @@ Inspired by questions about the availability of [pattern matching](https://docs.
 Use by calling `match` on a `CharSequence` with a lambda that will have available:
  
 - an `input` property with an overloaded `equals` to do regex matching with 
-- `match` property and `matchXAs` to help with destructuring capture groups
+- a `matches` property and `matchXAs` methods to access capture groups
 
 Mainly for fun :)
 
