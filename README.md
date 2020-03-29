@@ -8,24 +8,24 @@ Inspired by questions about the availability of [pattern matching](https://docs.
 
 Use by calling `match` on a `CharSequence` with a lambda that will have available:
  
-- an overloaded `in` keyword for regex matching 
-- `matches` and `matchesX` methods to help with destructuring capture groups
+- an `input` property with an overloaded `equals` to do regex matching with 
+- `match` property and `matchXAs` to help with destructuring capture groups
 
 Mainly for fun :)
 
 ```kotlin
 "hello everybody" match {
-    when (it) {
-        in """([a-z ]+)""" -> matches().let { (something) -> "say $something" }
-        else               -> "say nothing"
+    when (input) {
+        """([a-z ]+)""" -> matches.let { (something) -> "say $something" }
+        else            -> "say nothing"
     }
 } // "say hello everybody"
 
 "sum 1 2" match {
-    when (it) {
-        in """sum (\d+) (\d+)"""    -> matches2<Int, Int>().let { (first, second) -> first + second }
-        in """concat (\d+) (\d+)""" -> matches().let { (first, second) -> (first + second).toInt() }
-        else                        -> Int.MAX_VALUE
+    when (input) {
+        """sum (\d+) (\d+)"""    -> match2As<Int, Int>().let { first + second }
+        """concat (\d+) (\d+)""" -> match2As<String, String>().let { (first + second).toInt() }
+        else                     -> Int.MAX_VALUE
     }
 } // 3
 ```
