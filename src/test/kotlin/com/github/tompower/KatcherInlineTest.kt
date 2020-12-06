@@ -4,7 +4,7 @@ import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import org.junit.Test
 
-class KatcherTest {
+class KatcherInlineTest {
 
     @Test
     fun `can match a list of String typed capture groups`() {

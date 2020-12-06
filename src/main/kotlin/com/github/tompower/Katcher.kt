@@ -92,6 +92,9 @@ infix fun <T> CharSequence.match(
     block: Katcher.() -> T
 ): T = Katcher(this.toString()).block()
 
+fun <T> (Katcher.() -> T).match(input: CharSequence): T =
+    Katcher(input.toString()).this()
+
 
 
 
