@@ -68,13 +68,10 @@ class Katcher(
         )
 
     inline fun <reified T> String.toType(): T =
-        try {
-            this.toInt() as T
-        } catch (e: Exception) {
-            when {
-                this.count() == 1 -> this.toCharArray()[0] as T
-                else              -> this as T
-            }
+        when (T::class) {
+            Integer::class -> this.toInt() as T
+            Char::class    -> this.toCharArray()[0] as T
+            else           -> this as T
         }
 
     data class Match1<A>(val first: A)

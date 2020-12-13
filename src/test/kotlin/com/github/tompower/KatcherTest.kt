@@ -56,8 +56,8 @@ abstract class KatcherTest {
                 """S"""                         -> Start
                 """S ([a-zA-Z]+)"""             -> matches.let { (something) -> Say(something) }
                 """W (\d+) (\d+) ([a-zA-Z])"""  ->
-                    matches.threeAs<Int, Int, Char>().let { (times, vigour, hand) ->
-                        Wave(times, vigour, Hand.valueOf(hand.toString()))
+                    matches.threeAs<Int, Int, String>().let { (times, vigour, hand) ->
+                        Wave(times, vigour, Hand.valueOf(hand))
                     }
                 """F (\d+) (\d+) (\d+) (\d+)""" ->
                     matches.fourAs<Int, Int, Int, Int>().let { (speed, x, y, z) ->
