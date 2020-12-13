@@ -3,6 +3,8 @@ package com.github.tompower
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import org.junit.Test
+import strikt.api.expectThat
+import strikt.assertions.isEqualTo
 
 class KatcherExtensionTest {
 
@@ -63,17 +65,16 @@ class KatcherExtensionTest {
             }
         }
 
-        assertThat(robotCommandMatcher.match("S"), equalTo(Start as RobotCommand))
-        assertThat(robotCommandMatcher.match("S bye"), equalTo(Say("bye") as RobotCommand))
-        assertThat(
-            robotCommandMatcher.match("W 5 100 L"),
-            equalTo(Wave(times = 5, vigour = 100, hand = 'L') as RobotCommand)
+        expectThat(robotCommandMatcher.match("S")).isEqualTo(Start)
+        expectThat(robotCommandMatcher.match("S bye")).isEqualTo(Say("bye"))
+        expectThat(robotCommandMatcher.match("W 5 100 L")).isEqualTo(Wave(times = 5, vigour = 100, hand = 'L'))
+        expectThat(robotCommandMatcher.match("F 100000000 1 0 0")).isEqualTo(
+            Fly(
+                speed = 100000000,
+                place = PointInSpace(1, 0, 0)
+            )
         )
-        assertThat(
-            robotCommandMatcher.match("F 100000000 1 0 0"),
-            equalTo(Fly(speed = 100000000, place = PointInSpace(1, 0, 0)) as RobotCommand)
-        )
-        assertThat(robotCommandMatcher.match("lalala"), equalTo(Unknown as RobotCommand))
+        expectThat(robotCommandMatcher.match("lalala")).isEqualTo(Unknown)
     }
 
     data class PointInSpace(val x: Int, val y: Int, val z: Int)
