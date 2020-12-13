@@ -6,7 +6,9 @@ import org.junit.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 
-class KatcherInlineTest {
+abstract class KatcherTest {
+
+    abstract fun <T> matchWith(matcher: Katcher.() -> T): (String) -> T
 
     @Test
     fun `can match a list of String typed capture groups`() {
@@ -17,71 +19,72 @@ class KatcherInlineTest {
             }
         }
 
-        assertThat("abc 123" match matcher, equalTo("abc, 123"))
-        assertThat("lalala" match matcher, equalTo("not found"))
+        assertThat(matchWith(matcher)("abc 123"), equalTo("abc, 123"))
+        assertThat(matchWith(matcher)("lalala"), equalTo("not found"))
     }
 
     @Test
     fun `can match Int typed capture groups`() {
         val matcher: Katcher.() -> Int = {
             when (input) {
-                """(\d+) (\d+)""" -> match2As<Int, Int>().run { first + second }
+                """(\d+) (\d+)""" -> matches.twoAs<Int, Int>().run { first + second }
                 else              -> Int.MAX_VALUE
             }
         }
 
-        assertThat("1 2" match matcher, equalTo(3))
-        assertThat("lalala" match matcher, equalTo(Int.MAX_VALUE))
+        assertThat(matchWith(matcher)("1 2"), equalTo(3))
+        assertThat(matchWith(matcher)("lalala"), equalTo(Int.MAX_VALUE))
     }
 
     @Test
     fun `can match Char typed capture groups`() {
         val matcher: Katcher.() -> Char = {
             when (input) {
-                """([a-zA-Z])""" -> match1As<Char>().first
+                """([a-zA-Z])""" -> matches.oneAs()
                 else             -> 'N'
             }
         }
 
-        assertThat("C" match matcher, equalTo('C'))
-        assertThat("lalala" match matcher, equalTo('N'))
+        assertThat(matchWith(matcher)("C"), equalTo('C'))
+        assertThat(matchWith(matcher)("lalala"), equalTo('N'))
     }
 
     @Test
     fun `can match mixed capture groups`() {
-        val robotCommandMatcher: Katcher.() -> RobotCommand = {
+        val matcher: Katcher.() -> RobotCommand = {
             when (input) {
                 """S"""                         -> Start
                 """S ([a-zA-Z]+)"""             -> matches.let { (something) -> Say(something) }
                 """W (\d+) (\d+) ([a-zA-Z])"""  ->
-                    match3As<Int, Int, Char>().let { (times, vigour, hand) ->
-                        Wave(times, vigour, hand)
+                    matches.threeAs<Int, Int, Char>().let { (times, vigour, hand) ->
+                        Wave(times, vigour, Hand.valueOf(hand.toString()))
                     }
                 """F (\d+) (\d+) (\d+) (\d+)""" ->
-                    match4As<Int, Int, Int, Int>().let { (speed, x, y, z) ->
+                    matches.fourAs<Int, Int, Int, Int>().let { (speed, x, y, z) ->
                         Fly(speed, PointInSpace(x, y, z))
                     }
                 else                            -> Unknown
             }
         }
 
-        expectThat("S" match robotCommandMatcher).isEqualTo(Start)
-        expectThat("S bye" match robotCommandMatcher).isEqualTo(Say("bye"))
-        expectThat("W 5 100 L" match robotCommandMatcher).isEqualTo(Wave(times = 5, vigour = 100, hand = 'L'))
-        expectThat("F 100000000 1 0 0" match robotCommandMatcher).isEqualTo(
+        expectThat(matchWith(matcher)("S")).isEqualTo(Start)
+        expectThat(matchWith(matcher)("S bye")).isEqualTo(Say("bye"))
+        expectThat(matchWith(matcher)("W 5 100 L")).isEqualTo(Wave(times = 5, vigour = 100, hand = Hand.L))
+        expectThat(matchWith(matcher)("F 100000000 1 0 0")).isEqualTo(
             Fly(
                 speed = 100000000,
                 place = PointInSpace(1, 0, 0)
             )
         )
-        expectThat("lalala" match robotCommandMatcher).isEqualTo(Unknown)
+        expectThat(matchWith(matcher)("lalala")).isEqualTo(Unknown)
     }
 
     data class PointInSpace(val x: Int, val y: Int, val z: Int)
     open class RobotCommand
     object Start : RobotCommand()
     data class Say(val something: String) : RobotCommand()
-    data class Wave(val times: Int, val vigour: Int, val hand: Char) : RobotCommand()
+    enum class Hand { L, R }
+    data class Wave(val times: Int, val vigour: Int, val hand: Hand) : RobotCommand()
     data class Fly(val speed: Int, val place: PointInSpace) : RobotCommand()
     object Unknown : RobotCommand()
 }
