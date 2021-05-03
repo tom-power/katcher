@@ -74,7 +74,6 @@ class Katcher(
             else           -> this as T
         }
 
-    data class Match1<A>(val first: A)
     data class Match2<A, B>(val first: A, val second: B)
     data class Match3<A, B, C>(val first: A, val second: B, val third: C)
     data class Match4<A, B, C, D>(val first: A, val second: B, val third: C, val fourth: D)
